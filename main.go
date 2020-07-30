@@ -9,8 +9,8 @@ import (
 	"syscall"
 	"time"
 
-	"./config"
-	. "./gosearch"
+	"github.com/PioKozi/xkcdbot-discord/config"
+	"github.com/PioKozi/xkcdbot-discord/gosearch"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -78,12 +78,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		} else if strings.HasPrefix(message, BotPrefix+"xkcd") {
 			message = cleanInput(message, BotPrefix+"xkcd")
 			searchTerm := fmt.Sprintf("site:xkcd.com AND inurl:https://xkcd.com/ %s", message)
-			result, err := GoogleScrape(searchTerm)
+			result, err := gosearch.GoogleScrape(searchTerm)
 			if err != nil {
 				fmt.Println("ERROR: ", err)
 				return
 			}
-			if result == (GoogleResult{}) { // check if there are no results
+			if result == (gosearch.GoogleResult{}) { // check if there are no results
 				s.ChannelMessageSend(channel, "no good results for search")
 			} else {
 				s.ChannelMessageSend(channel, result.Url)
@@ -102,12 +102,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		} else if strings.HasPrefix(message, BotPrefix+"whatif") {
 			message = cleanInput(message, BotPrefix+"whatif")
 			searchTerm := fmt.Sprintf("site:what-if.xkcd.com AND inurl:https://what-if.xkcd.com/ %s", message)
-			result, err := GoogleScrape(searchTerm)
+			result, err := gosearch.GoogleScrape(searchTerm)
 			if err != nil {
 				fmt.Println("ERROR: ", err)
 				return
 			}
-			if result == (GoogleResult{}) {
+			if result == (gosearch.GoogleResult{}) {
 				s.ChannelMessageSend(channel, "no good results for search")
 			} else {
 				s.ChannelMessageSend(channel, result.Url)
