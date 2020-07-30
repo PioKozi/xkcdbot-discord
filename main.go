@@ -10,6 +10,8 @@ import (
 	"syscall"
 	"time"
 
+	. "./gosearch"
+
 	"github.com/bwmarrin/discordgo"
 )
 
