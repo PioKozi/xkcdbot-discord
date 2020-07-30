@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
 	"os/signal"
@@ -10,23 +9,25 @@ import (
 	"syscall"
 	"time"
 
+	"./config"
 	. "./gosearch"
 
 	"github.com/bwmarrin/discordgo"
 )
 
 var (
-	Token string
+	Token     string
+	BotPrefix string
 )
-
-func flagsParse() {
-	flag.StringVar(&Token, "t", "", "Bot Token")
-	flag.Parse()
-}
 
 func main() {
 
-	flagsParse()
+	err := config.ReadConfig()
+	if err != nil {
+		return
+	}
+	Token = config.Token
+	BotPrefix = config.BotPrefix
 
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
@@ -58,7 +59,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if strings.HasPrefix(m.Content, ".") {
+	if strings.HasPrefix(m.Content, BotPrefix) {
 		message := m.Content
 		channel := m.ChannelID
 		logMessage(message)
@@ -66,16 +67,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		/* COMMANDS USING IDS MUST BE FIRST */
 
 		// Searching xkcd comics
-		if strings.HasPrefix(message, ".xkcdid") {
-			message = cleanInput(message, ".xkcdid")
+		if strings.HasPrefix(message, BotPrefix+"xkcdid") {
+			message = cleanInput(message, BotPrefix+"xkcdid")
 			if validID(message) {
 				link := fmt.Sprintf("https://xkcd.com/%s", message)
 				s.ChannelMessageSend(channel, link)
 			} else {
 				s.ChannelMessageSend(channel, "not an ID")
 			}
-		} else if strings.HasPrefix(message, ".xkcd") {
-			message = cleanInput(message, ".xkcd")
+		} else if strings.HasPrefix(message, BotPrefix+"xkcd") {
+			message = cleanInput(message, BotPrefix+"xkcd")
 			searchTerm := fmt.Sprintf("site:xkcd.com AND inurl:https://xkcd.com/ %s", message)
 			result, err := GoogleScrape(searchTerm)
 			if err != nil {
@@ -90,16 +91,16 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 
 		// Searching what if
-		if strings.HasPrefix(message, ".whatifid") {
-			message = cleanInput(message, ".whatifid")
+		if strings.HasPrefix(message, BotPrefix+"whatifid") {
+			message = cleanInput(message, BotPrefix+"whatifid")
 			if validID(message) {
 				link := fmt.Sprintf("https://what-if.xkcd.com/%s", message)
 				s.ChannelMessageSend(channel, link)
 			} else {
 				s.ChannelMessageSend(channel, "not an ID")
 			}
-		} else if strings.HasPrefix(message, ".whatif") {
-			message = cleanInput(message, ".whatif")
+		} else if strings.HasPrefix(message, BotPrefix+"whatif") {
+			message = cleanInput(message, BotPrefix+"whatif")
 			searchTerm := fmt.Sprintf("site:what-if.xkcd.com AND inurl:https://what-if.xkcd.com/ %s", message)
 			result, err := GoogleScrape(searchTerm)
 			if err != nil {
