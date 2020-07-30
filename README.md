@@ -1,3 +1,5 @@
+![AppVeyor](https://img.shields.io/appveyor/build/PioKozi/xkcdbot-discord?style=flat-square)
+
 # xkcdbot
 
 A basic discord bot written in Go that searches for xkcd because we all love
