@@ -17,12 +17,14 @@ var (
 	Token string
 )
 
-func init() {
+func flagsParse() {
 	flag.StringVar(&Token, "t", "", "Bot Token")
 	flag.Parse()
 }
 
 func main() {
+
+	flagsParse()
 
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
