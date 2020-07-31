@@ -15,14 +15,18 @@ import (
 )
 
 var (
-	Token     string
-	BotPrefix string
+	// values for used for bot
+	Token     = os.Getenv("xkcdbottoken")
+	BotPrefix = "."
+
+	// maps input to id of relevant xkcd
+	// some are relevant more often, so are added here
+	Cache = map[string]string{
+		"security": "538",
+	}
 )
 
 func main() {
-
-	Token = os.Getenv("xkcdbottoken")
-	BotPrefix = "."
 
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
@@ -66,21 +70,25 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if strings.HasPrefix(message, BotPrefix+"xkcdid") {
 			message = cleanInput(message, BotPrefix+"xkcdid")
 			if validID(message) {
-				response = fmt.Sprintf("https://xkcd.com/%s", message)
+				response = fmt.Sprintf("https://xkcd.com/%s/", message)
 			} else {
 				response = "not a valid ID"
 			}
 		} else if strings.HasPrefix(message, BotPrefix+"xkcd") {
 			message = cleanInput(message, BotPrefix+"xkcd")
-			searchTerm := fmt.Sprintf("site:xkcd.com AND inurl:https://xkcd.com/ %s", message)
-			result, err := gosearch.GoogleScrape(searchTerm)
-			if err != nil {
-				response = fmt.Sprintf("There was an error searching for results: %s", err)
-			}
-			if result == (gosearch.GoogleResult{}) { // check if there are no results
-				response = "no good results for that search"
+			if cached, exists := Cache[message]; exists {
+				response = fmt.Sprintf("https://xkcd.com/%s/", cached)
 			} else {
-				response = result.Url
+				searchTerm := fmt.Sprintf("site:xkcd.com AND inurl:https://xkcd.com/ %s", message)
+				result, err := gosearch.GoogleScrape(searchTerm)
+				if err != nil {
+					response = fmt.Sprintf("There was an error searching for results: %s", err)
+				}
+				if result == (gosearch.GoogleResult{}) { // check if there are no results
+					response = "no good results for that search"
+				} else {
+					response = result.Url
+				}
 			}
 		}
 
@@ -88,7 +96,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if strings.HasPrefix(message, BotPrefix+"whatifid") {
 			message = cleanInput(message, BotPrefix+"whatifid")
 			if validID(message) {
-				response = fmt.Sprintf("https://what-if.xkcd.com/%s", message)
+				response = fmt.Sprintf("https://what-if.xkcd.com/%s/", message)
 			} else {
 				response = "not a valid ID"
 			}
@@ -112,18 +120,21 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 // useful is it's going pretty bad or is malicious around some time, somehow
 func logMessage(s string) {
+
 	fmt.Println("------------------------")
 	fmt.Println(time.Now())
 	fmt.Println(s)
 }
 
 func cleanInput(message, prefix string) string {
+
 	message = strings.TrimPrefix(message, prefix)
 	message = strings.TrimSpace(message)
 	return message
 }
 
 func validID(id string) bool {
+
 	i, err := strconv.Atoi(id)
 	if err != nil {
 		return false
