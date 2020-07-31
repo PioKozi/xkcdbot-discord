@@ -58,6 +58,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		message := m.Content
 		channel := m.ChannelID
 		logMessage(message)
+		var response string
 
 		/* COMMANDS USING IDS MUST BE FIRST */
 
@@ -65,23 +66,21 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if strings.HasPrefix(message, BotPrefix+"xkcdid") {
 			message = cleanInput(message, BotPrefix+"xkcdid")
 			if validID(message) {
-				link := fmt.Sprintf("https://xkcd.com/%s", message)
-				s.ChannelMessageSend(channel, link)
+				response = fmt.Sprintf("https://xkcd.com/%s", message)
 			} else {
-				s.ChannelMessageSend(channel, "not an ID")
+				response = "not a valid ID"
 			}
 		} else if strings.HasPrefix(message, BotPrefix+"xkcd") {
 			message = cleanInput(message, BotPrefix+"xkcd")
 			searchTerm := fmt.Sprintf("site:xkcd.com AND inurl:https://xkcd.com/ %s", message)
 			result, err := gosearch.GoogleScrape(searchTerm)
 			if err != nil {
-				fmt.Println("ERROR: ", err)
-				return
+				response = fmt.Sprintf("There was an error searching for results: %s", err)
 			}
 			if result == (gosearch.GoogleResult{}) { // check if there are no results
-				s.ChannelMessageSend(channel, "no good results for search")
+				response = "no good results for that search"
 			} else {
-				s.ChannelMessageSend(channel, result.Url)
+				response = result.Url
 			}
 		}
 
@@ -89,25 +88,25 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if strings.HasPrefix(message, BotPrefix+"whatifid") {
 			message = cleanInput(message, BotPrefix+"whatifid")
 			if validID(message) {
-				link := fmt.Sprintf("https://what-if.xkcd.com/%s", message)
-				s.ChannelMessageSend(channel, link)
+				response = fmt.Sprintf("https://what-if.xkcd.com/%s", message)
 			} else {
-				s.ChannelMessageSend(channel, "not an ID")
+				response = "not a valid ID"
 			}
 		} else if strings.HasPrefix(message, BotPrefix+"whatif") {
 			message = cleanInput(message, BotPrefix+"whatif")
 			searchTerm := fmt.Sprintf("site:what-if.xkcd.com AND inurl:https://what-if.xkcd.com/ %s", message)
 			result, err := gosearch.GoogleScrape(searchTerm)
 			if err != nil {
-				fmt.Println("ERROR: ", err)
-				return
+				response = fmt.Sprintf("There was an error searching for results: %s", err)
 			}
 			if result == (gosearch.GoogleResult{}) {
-				s.ChannelMessageSend(channel, "no good results for search")
+				response = "no good results for search"
 			} else {
-				s.ChannelMessageSend(channel, result.Url)
+				response = result.Url
 			}
 		}
+
+		s.ChannelMessageSend(channel, response)
 	}
 }
 
