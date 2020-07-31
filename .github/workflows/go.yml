@@ -27,8 +27,8 @@ jobs:
       run: go mod download
 
     - name: Build
-      run: go build -v .
+      run: go build -v ./cmd/main
 
-    - name: Test
+    - name: Test gosearch
       run: go test -v .
-      working-directory: ./gosearch
+      working-directory: ./cmd/gosearch

@@ -1,3 +1,6 @@
 .env
 xkcdbot-discord
 bin/
+
+# might not get around to writing this proper
+gocache/
