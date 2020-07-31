@@ -8,6 +8,8 @@ Made using [discordgo](https://github.com/bwmarrin/discordgo/)
 [This repository](https://github.com/EdmundMartin/gosearcher) was helpful for me
 in writing the backend for searches.
 
+Hosted on [heroku](https://heroku.com/)
+
 ## Add to server
 
 [invite link
@@ -48,7 +50,7 @@ Existing commands are:
 
 ## Todo
 
-* [ ] Figure out a FOSS hosting solution for this so I don't need to have this
+* [x] Figure out a FOSS hosting solution for this so I don't need to have this
   bot running on my laptop all the time.
 * [ ] Unit tests for http response.
 * [ ] Saner/shorter command names.
