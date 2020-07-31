@@ -22,14 +22,16 @@ Permissions are to:
 
 ***OR***
 
-You can clone the repository, fill in `config.json`, and build the bot yourself.
-If you do this, you can add your bot to your servers yourself :)
+You can clone the repository, and build the bot yourself. If you do this, you
+can add your bot to your servers yourself :)
+
+Bot token is stored in the environment variable `xkcdbottoken`.
 
 ```bash
 git clone https://github.com/PioKozi/xkcdbot-discord.git
 cd xkcdbot-discord
 
-# edit config/config.json
+export xkcdbottoken="put your token here :)"
 
 go build
 ./xkcdbot-discord
@@ -52,6 +54,6 @@ Existing commands are:
 
 * [x] Figure out a FOSS hosting solution for this so I don't need to have this
   bot running on my laptop all the time.
-* [ ] Unit tests for http response.
+* [ ] Figure out what other unit tests we maybe need.
 * [ ] Saner/shorter command names.
 * [ ] Get this bot on at least one server other than my testing server :(

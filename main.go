@@ -9,7 +9,6 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/PioKozi/xkcdbot-discord/config"
 	"github.com/PioKozi/xkcdbot-discord/gosearch"
 
 	"github.com/bwmarrin/discordgo"
@@ -22,12 +21,8 @@ var (
 
 func main() {
 
-	err := config.ReadConfig()
-	if err != nil {
-		return
-	}
-	Token = config.Token
-	BotPrefix = config.BotPrefix
+	Token = os.Getenv("xkcdbottoken")
+	BotPrefix = "."
 
 	dg, err := discordgo.New("Bot " + Token)
 	if err != nil {
