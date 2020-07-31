@@ -50,10 +50,18 @@ Existing commands are:
 * `.whatif <string>` - like `.xkcd`, but for what-if.xkcd.com
 * `.whatifid <int>` - ditto but using id
 
+Certain xkcds are also "cached", meaning if you search for it with a specific
+term via `.xkcd <string>`, it will not be searched, but rather returned
+*immediately* by id. An example of this is with `.xkcd security`, which
+immediately posts [xkcd: Security](https://xkcd.com/538/)
+
 ## Todo
 
 * [x] Figure out a FOSS hosting solution for this so I don't need to have this
-  bot running on my laptop all the time.
+    bot running on my laptop all the time.
+* [ ] Cache popular xkcds via a relational DB instead of hard-coded values.
+  * Make sure it's a good choice for use with heroku. i.e. sqlite isn't a great
+      option.
 * [ ] Figure out what other unit tests we maybe need.
 * [ ] Saner/shorter command names.
 * [ ] Get this bot on at least one server other than my testing server :(
