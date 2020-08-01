@@ -59,9 +59,7 @@ immediately posts [xkcd: Security](https://xkcd.com/538/)
 
 * [x] Figure out a FOSS hosting solution for this so I don't need to have this
     bot running on my laptop all the time.
-* [ ] Cache popular xkcds via a relational DB instead of hard-coded values.
-  * Make sure it's a good choice for use with heroku. i.e. sqlite isn't a great
-      option.
-* [ ] Figure out what other unit tests we maybe need.
-* [ ] Saner/shorter command names.
+* [x] Cache searches with an in-built type (lost on restart).
+* [ ] Keep cache around, initialising it on restart, most likely using a
+    relation DB.
 * [ ] Get this bot on at least one server other than my testing server :(
