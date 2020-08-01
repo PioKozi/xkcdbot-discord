@@ -9,14 +9,14 @@ func TestMain(t *testing.M) {
 	os.Exit(t.Run())
 }
 
-type Table struct {
-	Using string
-	Want  string
+type table struct {
+	using string
+	want  string
 }
 
 // add more as needs get figured out
 func TestBuildGoogleUrl(t *testing.T) {
-	tables := []Table{
+	tables := []table{
 		{
 			"xkcd",
 			"https://www.google.com/search?q=xkcd&num=1",
@@ -31,13 +31,11 @@ func TestBuildGoogleUrl(t *testing.T) {
 		},
 	}
 
-	for _, table := range tables {
-		got := buildGoogleUrl(table.Using)
-		if got != table.Want {
-			t.Errorf("\nGot \"%s\"\nWant \"%s\"\n", got, table.Want)
+	for _, test := range tables {
+		got := buildGoogleUrl(test.using)
+		if got != test.want {
+			t.Errorf("\nGot \"%s\"\nWant \"%s\"\n", got, test.want)
 			t.Fail()
 		}
 	}
 }
-
-// TODO:  unit tests for GoogleScrape

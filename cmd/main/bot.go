@@ -29,7 +29,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if strings.HasPrefix(m.Content, botPrefix) {
 		message := m.Content
-		message = strings.ToLower(message)
 		channel := m.ChannelID
 		LogMessage(message)
 		var response string
@@ -38,14 +37,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		// Searching xkcd comics
 		if strings.HasPrefix(message, botPrefix+"xkcdid") { // immediately send by id
-			message = CleanInput(message, botPrefix+"xkcdid")
+			message = PrepareInput(message, botPrefix+"xkcdid")
 			if ValidID(message) {
 				response = fmt.Sprintf("https://xkcd.com/%s/", message)
 			} else {
 				response = "not a valid ID"
 			}
 		} else if strings.HasPrefix(message, botPrefix+"xkcd") { // search by name via gosearch
-			message = CleanInput(message, botPrefix+"xkcd")
+			message = PrepareInput(message, botPrefix+"xkcd")
 			if cached, exists := cache[message]; exists { // check cache first, may save time
 				response = fmt.Sprintf("https://xkcd.com/%s/", cached)
 			} else { // wasn't in cache, search with GoogleScrape
@@ -67,14 +66,14 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		// Searching what if
 		if strings.HasPrefix(message, botPrefix+"whatifid") { // immediately send by id
-			message = CleanInput(message, botPrefix+"whatifid")
+			message = PrepareInput(message, botPrefix+"whatifid")
 			if ValidID(message) {
 				response = fmt.Sprintf("https://what-if.xkcd.com/%s/", message)
 			} else {
 				response = "not a valid ID"
 			}
 		} else if strings.HasPrefix(message, botPrefix+"whatif") { // search by name via gosearch - no cache for whatif
-			message = CleanInput(message, botPrefix+"whatif")
+			message = PrepareInput(message, botPrefix+"whatif")
 			searchTerm := fmt.Sprintf("site:what-if.xkcd.com AND inurl:https://what-if.xkcd.com/ %s", message)
 			result, err := gosearch.GoogleScrape(searchTerm)
 			if err != nil {
