@@ -11,28 +11,28 @@ import (
 
 var (
 	// values for used for bot
-	Token     = os.Getenv("XKCDBOTTOKEN")
-	BotPrefix = "."
+	token     = os.Getenv("XKCDBOTTOKEN")
+	botPrefix = "."
 )
 
 func main() {
 
 	// initialise the bot
-	Bot, err := discordgo.New("Bot " + Token)
+	bot, err := discordgo.New("bot " + token)
 	if err != nil {
 		fmt.Println("error creating Discord session,", err)
 		return
 	}
-	defer Bot.Close() // defer closing the session
+	defer bot.Close() // defer closing the session
 
 	// add messageCreate() as a response to MessageCreate events
-	Bot.AddHandler(messageCreate)
+	bot.AddHandler(messageCreate)
 
 	// able to receive message events
-	Bot.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
+	bot.Identify.Intents = discordgo.MakeIntent(discordgo.IntentsGuildMessages)
 
 	// open the connection
-	err = Bot.Open()
+	err = bot.Open()
 	if err != nil {
 		fmt.Println("error opening connection,", err)
 		return

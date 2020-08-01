@@ -33,3 +33,9 @@ func ValidID(id string) bool {
 	}
 	return true
 }
+
+func UpdateStringsMap(oldmap, updatemap map[string]string) {
+	for key, value := range updatemap {
+		oldmap[key] = value // not checking if key is already taken, new results are more important
+	}
+}
