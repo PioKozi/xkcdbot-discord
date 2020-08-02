@@ -29,9 +29,9 @@ jobs:
     - name: Build
       run: go build -v ./cmd/main
 
-    - name: Test cmd/gosearch
+    - name: Test cmd/search
       run: go test -v .
-      working-directory: ./cmd/gosearch
+      working-directory: ./cmd/search
 
     - name: Test pkg/common
       run: go test -v .
