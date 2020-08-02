@@ -37,7 +37,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		} else if strings.HasPrefix(message, botPrefix+"xkcd") { // search by name via package search
 			message = PrepareInput(message, botPrefix+"xkcd")
 			if cached, exists := cache.Cache[message]; exists { // check cache first, may save time
-				response = fmt.Sprintf("https://xkcd.com/%s/", cached)
+				response = cached
 			} else { // wasn't in cache, search with GoogleScrape
 				searchTerm := fmt.Sprintf("site:xkcd.com AND inurl:https://xkcd.com/ %s", message)
 				result, err := search.GoogleScrape(searchTerm)
@@ -48,8 +48,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 					response = "no good results for that search"
 				} else {
 					response = result
-					id := strings.Split(response, "/")[3] // following https format, this should always be the id
-					cache.UpdateLastSearches(message, id) // updates list of previous searches
+					cache.UpdateLastSearches(message, result) // updates list of previous searches
 				}
 			}
 		}

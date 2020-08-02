@@ -2,6 +2,7 @@ package search
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 
@@ -24,6 +25,7 @@ func googleRequest(searchUrl string) (*http.Response, error) {
 	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36")
 
 	res, err := baseClient.Do(req)
+	log.Println(res)
 	if err != nil {
 		return nil, err
 	} else {
@@ -53,6 +55,11 @@ func googleResultParser(response *http.Response) (string, error) {
 }
 
 func GoogleScrape(searchTerm string) (string, error) {
+	// hardocodinig shit because sometimes Google isn't very nice
+	switch searchTerm {
+	case "dynamic entropy":
+		return "https://xkcd.com/2318/", nil
+	}
 	googleUrl := buildGoogleUrl(searchTerm)
 	res, err := googleRequest(googleUrl)
 	if err != nil {

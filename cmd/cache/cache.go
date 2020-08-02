@@ -7,7 +7,7 @@ type searchPair struct {
 
 var (
 	Cache = map[string]string{
-		"security": "538",
+		"security": "https://xkcd.com/538",
 	}
 
 	lastSearches = []searchPair{}
