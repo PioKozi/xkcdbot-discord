@@ -44,10 +44,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				if err != nil {
 					response = fmt.Sprintf("There was an error searching for results: %s", err)
 				}
-				if result == (search.GoogleResult{}) { // check if there are no results
+				if result == "" { // check if there are no results
 					response = "no good results for that search"
 				} else {
-					response = result.Url
+					response = result
 					id := strings.Split(response, "/")[3] // following https format, this should always be the id
 					cache.UpdateLastSearches(message, id) // updates list of previous searches
 				}
@@ -69,10 +69,10 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			if err != nil {
 				response = fmt.Sprintf("There was an error searching for results: %s", err)
 			}
-			if result == (search.GoogleResult{}) {
+			if result == "" {
 				response = "no good results for search"
 			} else {
-				response = result.Url
+				response = result
 			}
 		}
 

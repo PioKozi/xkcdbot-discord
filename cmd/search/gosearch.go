@@ -8,12 +8,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type GoogleResult struct {
-	Url   string
-	Title string
-	Desc  string
-}
-
 // returns url for the whole search
 func buildGoogleUrl(searchTerm string) string {
 	searchTerm = strings.Trim(searchTerm, " ")
@@ -37,11 +31,11 @@ func googleRequest(searchUrl string) (*http.Response, error) {
 	}
 }
 
-func googleResultParser(response *http.Response) (GoogleResult, error) {
+func googleResultParser(response *http.Response) (string, error) {
 
 	doc, err := goquery.NewDocumentFromResponse(response)
 	if err != nil {
-		return GoogleResult{}, err
+		return "", err
 	}
 
 	sel := doc.Find("div.g")
@@ -51,33 +45,23 @@ func googleResultParser(response *http.Response) (GoogleResult, error) {
 	link, _ := linkTag.Attr("href")
 	link = strings.Trim(link, " ")
 
-	titleTag := item.Find("h3.r")
-	title := titleTag.Text()
-
-	descTag := item.Find("span.st")
-	desc := descTag.Text()
-
 	if link != "" && link != "#" {
-		return GoogleResult{
-			link,
-			title,
-			desc,
-		}, err
+		return link, err
 	}
 
-	return GoogleResult{}, err
+	return "", err
 }
 
-func GoogleScrape(searchTerm string) (GoogleResult, error) {
+func GoogleScrape(searchTerm string) (string, error) {
 	googleUrl := buildGoogleUrl(searchTerm)
 	res, err := googleRequest(googleUrl)
 	if err != nil {
-		return GoogleResult{}, err
+		return "", err
 	}
-	scrape, err := googleResultParser(res)
+	link, err := googleResultParser(res)
 	if err != nil {
-		return GoogleResult{}, err
+		return "", err
 	} else {
-		return scrape, nil
+		return link, nil
 	}
 }
