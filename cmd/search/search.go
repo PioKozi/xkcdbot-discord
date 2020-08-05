@@ -14,7 +14,7 @@ func buildGoogleUrl(searchTerm string) string {
 	searchTerm = strings.Trim(searchTerm, " ")
 	searchTerm = strings.Join(strings.Fields(searchTerm), " ")
 	searchTerm = strings.Replace(searchTerm, " ", "+", -1)
-	return fmt.Sprintf("https://www.google.com/search?q=%s&num=1", searchTerm)
+	return fmt.Sprintf("https://www.google.co.uk/search?q=%s&num=1", searchTerm)
 }
 
 // returns the HTML for that search
@@ -22,7 +22,7 @@ func googleRequest(searchUrl string) (*http.Response, error) {
 	baseClient := &http.Client{}
 
 	req, _ := http.NewRequest("GET", searchUrl, nil)
-	req.Header.Set("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36")
+	req.Header.Set("User-Agent", randomUserAgent())
 
 	res, err := baseClient.Do(req)
 	log.Println(res)
@@ -55,10 +55,18 @@ func googleResultParser(response *http.Response) (string, error) {
 }
 
 func GoogleScrape(searchTerm string) (string, error) {
-	// hardocodinig shit because sometimes Google isn't very nice
-	switch searchTerm {
+	// hardcoding queries because sometimes Google isn't very nice (which in
+	// this scenario is fair, really)
+	log.Println(searchTerm)
+	switch strings.Join(strings.Fields(searchTerm)[3:], " ") {
 	case "dynamic entropy":
 		return "https://xkcd.com/2318/", nil
+	case "sudo":
+		return "https://xkcd.com/149/", nil
+	case "network":
+		return "https://xkcd.com/350/", nil
+	case "networking":
+		return "https://xkcd.com/2259/", nil
 	}
 	googleUrl := buildGoogleUrl(searchTerm)
 	res, err := googleRequest(googleUrl)
