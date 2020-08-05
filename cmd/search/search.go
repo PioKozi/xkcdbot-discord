@@ -14,7 +14,7 @@ func buildGoogleUrl(searchTerm string) string {
 	searchTerm = strings.Trim(searchTerm, " ")
 	searchTerm = strings.Join(strings.Fields(searchTerm), " ")
 	searchTerm = strings.Replace(searchTerm, " ", "+", -1)
-	return fmt.Sprintf("https://www.google.co.uk/search?q=%s&num=1", searchTerm)
+	return fmt.Sprintf("https://www.google.com/search?q=%s&num=1", searchTerm)
 }
 
 // returns the HTML for that search
