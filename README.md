@@ -62,4 +62,7 @@ immediately posts [xkcd: Security](https://xkcd.com/538/)
 * [x] Cache searches with an in-built type (lost on restart).
 * [ ] Keep cache around, initialising it on restart, most likely using a
     relation DB.
-* [ ] Get this bot on at least one server other than my testing server :(
+* [ ] Migrate from searching xkcds via Google, to having all the xkcds in a
+    postgresql DB, and make this work with heroku.
+  * This should be useful, as currently the bot can be blocked by Google,
+      which is bad for just wanting to use the bot :(
