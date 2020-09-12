@@ -12,16 +12,6 @@ Hosted on [heroku](https://heroku.com/)
 
 ## Add to server
 
-[invite link
-here](https://discord.com/oauth2/authorize?client_id=738373714705514507&scope=bot&permissions=18432)
-
-Permissions are to:
-
-* send messages
-* embed links
-
-***OR***
-
 You can clone the repository, and build the bot yourself. If you do this, you
 can add your bot to your servers yourself :)
 
